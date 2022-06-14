@@ -36,7 +36,7 @@ function updateFormValuesFromLS(evt) {
 function saveSubmitFormValues(evt) {
   evt.preventDefault();
 
-  formData = new FormData(evt.currentTarget);
+  const formData = new FormData(evt.currentTarget);
 
   formData.forEach((value, name) => {
     console.log(`${name}: ${value}`);
