@@ -1,18 +1,22 @@
 const refs = {
   form: document.querySelector('.feedback-form'),
-  input: document.querySelector('input'),
   textarea: document.querySelector('textarea'),
+  input: document.querySelector('input[name="email"]'),
 };
 
 const currentFormValues = {};
 
-refs.form.addEventListener('submit', getFormValues);
-refs.textarea.addEventListener('input', saveCurrentTextareaValueInLS);
-refs.input.addEventListener('input', saveCurrentInputValueInLS);
+refs.form.addEventListener('submit', saveSubmitFormValues);
+refs.form.addEventListener('input', getInputsValues);
 window.addEventListener('load', updateFormValuesFromLS);
 
-function saveCurrentInputValueInLS(evt) {
-  currentFormValues.email = evt.target.value;
+function getInputsValues(evt) {
+  const {
+    elements: { email, message },
+  } = evt.currentTarget;
+
+  currentFormValues.email = email.value;
+  currentFormValues.message = message.value;
 
   localStorage.setItem(
     'feedback-form-state',
@@ -20,16 +24,7 @@ function saveCurrentInputValueInLS(evt) {
   );
 }
 
-function saveCurrentTextareaValueInLS(evt) {
-  currentFormValues.message = evt.target.value;
-
-  localStorage.setItem(
-    'feedback-form-state',
-    JSON.stringify(currentFormValues)
-  );
-}
-
-function updateFormValuesFromLS() {
+function updateFormValuesFromLS(evt) {
   const formValues = JSON.parse(localStorage.getItem('feedback-form-state'));
 
   if (formValues) {
@@ -38,7 +33,7 @@ function updateFormValuesFromLS() {
   }
 }
 
-function getFormValues(evt) {
+function saveSubmitFormValues(evt) {
   evt.preventDefault();
 
   formData = new FormData(evt.currentTarget);
