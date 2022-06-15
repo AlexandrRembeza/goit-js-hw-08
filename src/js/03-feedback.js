@@ -36,12 +36,20 @@ function updateFormValuesFromLS(evt) {
 function saveSubmitFormValues(evt) {
   evt.preventDefault();
 
-  const formData = new FormData(evt.currentTarget);
+  const {
+    elements: { email, message },
+  } = evt.currentTarget;
 
-  formData.forEach((value, name) => {
-    console.log(`${name}: ${value}`);
-  });
+  if (email.value && message.value !== '') {
+    const formData = new FormData(evt.currentTarget);
 
-  localStorage.removeItem('feedback-form-state');
-  evt.currentTarget.reset();
+    formData.forEach((value, name) => {
+      console.log(`${name}: ${value}`);
+    });
+
+    localStorage.removeItem('feedback-form-state');
+    evt.currentTarget.reset();
+  } else {
+    return alert('Нужно заполнить все поля формы');
+  }
 }
